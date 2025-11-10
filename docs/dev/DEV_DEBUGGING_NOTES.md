@@ -4,8 +4,11 @@ This project supports an opt-in debugging mode that preserves the temporary
 files created while the agent runs. Enable it per invocation:
 
 ```bash
-GEVALS_DEBUG=1 ./gevals run <path-to-eval>
+GEVALS_DEBUG=1 ./gevals eval <path-to-eval>
 ```
+
+If you prefer a CLI option, pass `--debug` to `gevals eval` and the flag will
+export `GEVALS_DEBUG=1` for the duration of the run.
 
 When `GEVALS_DEBUG` is set, the agent runner creates a directory such as
 `/tmp/gevals-debug-XXXXXXXX`. If the agent command fails, the error message will
