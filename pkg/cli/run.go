@@ -18,6 +18,7 @@ func NewEvalCmd() *cobra.Command {
 	var outputFormat string
 	var verbose bool
 	var run string
+	var debug bool
 
 	cmd := &cobra.Command{
 		Use:   "eval [eval-config-file]",
@@ -31,6 +32,12 @@ func NewEvalCmd() *cobra.Command {
 			spec, err := eval.FromFile(configFile)
 			if err != nil {
 				return fmt.Errorf("failed to load eval config: %w", err)
+			}
+
+			if debug {
+				if err := os.Setenv("GEVALS_DEBUG", "1"); err != nil {
+					return fmt.Errorf("failed to enable debug mode: %w", err)
+				}
 			}
 
 			// Create runner
@@ -68,6 +75,7 @@ func NewEvalCmd() *cobra.Command {
 	cmd.Flags().StringVarP(&outputFormat, "output", "o", "text", "Output format (text, json)")
 	cmd.Flags().BoolVarP(&verbose, "verbose", "v", false, "Verbose output")
 	cmd.Flags().StringVarP(&run, "run", "r", "", "Regular expression to match task names to run (unanchored, like go test -run)")
+	cmd.Flags().BoolVar(&debug, "debug", false, "Preserve debug artifacts produced by the agent runner")
 
 	return cmd
 }
